@@ -56,8 +56,13 @@ export class FolderNode extends FFNode {
     );
   }
 
-  add(name: string, isFolder: boolean) {
-    let newNode = isFolder ? new FolderNode(name) : new FileNode(name);
+  add(name: string, isFolder = false) {
+    if (name === null || name === undefined || name.trim() === "")
+      throw new Error("Name field is required");
+
+    let newName = name.trim();
+
+    let newNode = isFolder ? new FolderNode(newName) : new FileNode(newName);
     newNode.parent = this;
 
     this.content.set(newNode.name, newNode);
@@ -111,6 +116,7 @@ export class FileTree {
       }
     }
 
+    this.root.content = new Map();
     this.root.add("big Folder", true);
     addContent(this.root.getFolder("big Folder"), 10000);
 

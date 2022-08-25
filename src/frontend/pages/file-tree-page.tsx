@@ -5,13 +5,14 @@ import { FileTree } from "../file-tree";
 
 interface FileTreeProps {}
 
-// TODO: Move the content generation to a perm. location.
+// TODO: Move tree generation to a perm. location.
 // This was for prototyping
 let tree = new FileTree();
-tree.generateContent();
 
 const FileTreePage = ({}: FileTreeProps) => {
   let selectionAPI = useSelectedRows();
+
+  let [name, setName] = React.useState("");
 
   let root = tree.root;
 
@@ -26,6 +27,29 @@ const FileTreePage = ({}: FileTreeProps) => {
     selectionAPI.clearAll();
   };
 
+  const generateDemo = () => {
+    tree.generateContent();
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.currentTarget.value);
+  };
+
+  const addFolder = () => {
+    // TODO FIX ANY
+    let selectedNode: any = Array.from(selected)[0];
+
+    if (selectedNode) {
+      selectedNode.add(name, true);
+      setName("");
+    } else {
+      tree.root.add(name, true);
+      setName("");
+    }
+  };
+
+  console.log(tree);
+
   return (
     <>
       <div>
@@ -33,8 +57,16 @@ const FileTreePage = ({}: FileTreeProps) => {
           Delete
         </button>
 
-        <button>New Folder</button>
+        <button onClick={addFolder}>New Folder</button>
         <button>New File</button>
+
+        <button onClick={generateDemo}>Generate Demo Content</button>
+      </div>
+
+      <div>
+        <label>
+          Name: <input onChange={onChange} value={name} />
+        </label>
       </div>
 
       <div>

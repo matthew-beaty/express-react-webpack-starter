@@ -66,6 +66,8 @@ const FileTreePage = ({}: FileTreeProps) => {
   const currentFolderOnclick = (node: any) => {
     tree.openFolder(node);
     setCurrentFolder(node);
+
+    selectionAPI.clearAll();
   };
   /** Set the current folder to the current folder's parent */
   const goToPareentFolder = () => {
@@ -73,26 +75,45 @@ const FileTreePage = ({}: FileTreeProps) => {
     let parentFolder = currentFolder.parent;
     tree.openFolder(parentFolder);
     setCurrentFolder(parentFolder);
+
+    selectionAPI.clearAll();
   };
 
+  console.log(currentFolder.name);
   return (
     <>
-      <div style={{ display: "flex" }}>
-        <Button onClick={deleteItems} isDisabled={selected.size === 0}>
-          Delete
-        </Button>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <Button
+            onClick={() => goToPareentFolder()}
+            isDisabled={
+              currentFolder.name === "/" || currentFolder.name === "empty"
+            }
+          >
+            Back
+          </Button>
+          <Button onClick={deleteItems} isDisabled={selected.size === 0}>
+            Delete
+          </Button>
+          <Button
+            onClick={() => currentFolderOnclick(Array.from(selected)[0])}
+            isDisabled={selected.size === 0}
+          >
+            Open Folder
+          </Button>
+        </div>
 
-        <Button onClick={addFolder}>New Folder</Button>
-        <Button>New File</Button>
-        <Button onClick={() => currentFolderOnclick(Array.from(selected)[0])}>
-          View Current Folder
-        </Button>
-        <Button onClick={() => goToPareentFolder()}>Go to Parent Folder</Button>
+        <div>
+          <Button onClick={addFolder}>New Folder</Button>
+          <Button>New File</Button>
+        </div>
 
         {
           // TODO: Generate Demo button should be removed before release
         }
-        <Button onClick={generateDemo}>Generate Demo Content</Button>
+        <div>
+          <Button onClick={generateDemo}>Generate Demo Content</Button>
+        </div>
       </div>
 
       <div>
@@ -105,7 +126,7 @@ const FileTreePage = ({}: FileTreeProps) => {
         currentFolder={currentFolder}
         openFolderHandler={currentFolderOnclick}
       ></PathBar>
-      <div style={{ width: "250px" }}>
+      <div>
         <Folder
           key={currentFolder.id}
           node={currentFolder}

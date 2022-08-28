@@ -10,22 +10,6 @@ interface FolderProps {
   openFolderHandler: any;
 }
 
-const styles = {
-  indentedContainer: {
-    marginLeft: "4px",
-    padding: "8px 20px",
-    height: "100%",
-    width: "100%",
-  },
-  row: {
-    minWidth: "250px",
-    padding: "20px",
-  },
-  selected: {
-    backgroundColor: "#98bdfa",
-  },
-};
-
 export const ClosedFolder = ({
   node,
   selectionAPI,
@@ -83,24 +67,20 @@ const Folder = ({ node, selectionAPI, openFolderHandler }: FolderProps) => {
     <>
       {/* {isExpanded &&  */}
       {sortedContent.length !== 0 && (
-        <div style={styles.indentedContainer}>
-          <div>
-            <VirtualList>
-              {sortedContent.map((d) =>
-                "content" in d ? (
-                  <ClosedFolder
-                    key={d.id}
-                    node={d}
-                    selectionAPI={selectionAPI}
-                    openFolderHandler={() => openFolderHandler(d)}
-                  />
-                ) : (
-                  <File key={d.id} node={d} selectionAPI={selectionAPI} />
-                )
-              )}
-            </VirtualList>
-          </div>
-        </div>
+        <VirtualList>
+          {sortedContent.map((d) =>
+            "content" in d ? (
+              <ClosedFolder
+                key={d.id}
+                node={d}
+                selectionAPI={selectionAPI}
+                openFolderHandler={() => openFolderHandler(d)}
+              />
+            ) : (
+              <File key={d.id} node={d} selectionAPI={selectionAPI} />
+            )
+          )}
+        </VirtualList>
       )}
     </>
   );

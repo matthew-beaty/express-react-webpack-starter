@@ -16,14 +16,17 @@ const Button = ({
   isPrimary = true,
   isDisabled = false,
 }: ButtonProps) => {
+  let backgroundColor = isPrimary ? colors.blue : colors.white;
+  backgroundColor = isDisabled ? colors.grey : backgroundColor;
+
   return (
     <button
       style={{
-        backgroundColor: isPrimary ? colors.blue : colors.white,
+        backgroundColor: backgroundColor,
         color: isPrimary ? colors.white : colors.black,
         padding: "8px",
         borderRadius: "4px",
-        cursor: "pointer",
+        cursor: isDisabled ? "default" : "pointer",
         border: "none",
         margin: "2px",
         fontSize: "14px",

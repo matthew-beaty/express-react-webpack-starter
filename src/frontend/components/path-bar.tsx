@@ -1,31 +1,19 @@
 import React from "react";
 import { FolderNode } from "../helpers/file-tree";
+import { getPath } from "../helpers/common";
 
 interface PathBarProps {
   currentFolder: FolderNode;
   openFolderHandler: (node: FolderNode) => void;
 }
 
-/** UI for displaying the current file path
- *
- */
+/** UI for displaying the current file path */
 const PathBar = ({ currentFolder, openFolderHandler }: PathBarProps) => {
-  let path: FolderNode[] = [];
-
+  // Don't render if there is no content
   if (currentFolder.name === "empty") return <></>;
-  const getPath = (currentFolder: FolderNode) => {
-    path.push(currentFolder);
 
-    if (currentFolder.parent) {
-      let parent = currentFolder.parent;
+  let path: FolderNode[] = getPath(currentFolder);
 
-      if (parent) getPath(parent);
-    }
-  };
-
-  getPath(currentFolder);
-
-  path.reverse();
   if (path.length > 6) {
     path = path.slice(-6);
   }
@@ -35,7 +23,11 @@ const PathBar = ({ currentFolder, openFolderHandler }: PathBarProps) => {
       {path.map((node) => (
         <div
           onClick={() => openFolderHandler(node)}
-          style={{ padding: "10px", margin: "10px" }}
+          style={{
+            padding: "10px",
+            margin: "10px",
+            cursor: currentFolder !== node ? "pointer" : "default",
+          }}
         >
           {node.name}
         </div>

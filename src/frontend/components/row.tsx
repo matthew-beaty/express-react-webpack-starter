@@ -26,11 +26,15 @@ interface RowProps {
   children: any;
 }
 
+/**
+ * Represents a generalized UI Row
+ */
 const Row = ({ isSelected, onClick, children }: RowProps) => {
   let [isHighlighted, setIsHighlighted] = React.useState(false);
 
   let rowStyle = styles.row;
   rowStyle = isHighlighted ? { ...rowStyle, ...styles.highlighted } : rowStyle;
+  // NOTE: isSelected should always override isHighlighted
   rowStyle = isSelected ? { ...rowStyle, ...styles.selected } : rowStyle;
 
   return (

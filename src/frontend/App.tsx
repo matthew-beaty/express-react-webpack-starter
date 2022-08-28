@@ -2,9 +2,6 @@ import * as React from "react";
 import { render } from "react-dom";
 import FileTreePage from "./pages/file-tree-page";
 
-// TEMP
-// import VirtualTestPage from "../frontend/components/virtual-list";
-
 interface AppProps {
   name: string;
 }
@@ -21,26 +18,14 @@ export class App extends React.Component<AppProps, AppState> {
     };
   }
 
-  //   componentDidMount() {
-  //     this.getTime();
-  //     setInterval(this.getTime, 2000);
-  //   }
-
   render() {
     return (
-      <>
+      <div style={{ margin: "auto", maxWidth: "800px" }}>
         <h1>File Explorer</h1>
         <FileTreePage />
-      </>
+      </div>
     );
   }
-
-  //   private getTime = async () => {
-  //     const response = await fetch("/api/time", { method: "GET" });
-  //     if (response.ok) {
-  //       this.setState({ time: await response.text() });
-  //     }
-  //   };
 }
 
 export function start() {

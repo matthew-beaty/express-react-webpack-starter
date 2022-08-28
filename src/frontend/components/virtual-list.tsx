@@ -66,7 +66,11 @@ const VirtualList = ({ children }: VirtualListProps) => {
     >
       <div
         className={styles.rows}
-        style={{ height: amountRows * rowHeight, position: "relative" }}
+        style={{
+          height: amountRows * rowHeight,
+          width: "800px",
+          position: "relative",
+        }}
         ref={rowsRef}
       >
         {[...arrayChildren]
@@ -77,6 +81,7 @@ const VirtualList = ({ children }: VirtualListProps) => {
               style={{
                 top: index * rowHeight,
                 height: "40px",
+                width: "inherit",
                 position: "absolute",
               }}
             >

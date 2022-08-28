@@ -65,6 +65,8 @@ export class FolderNode extends FFNode {
     newNode.parent = this;
 
     this.content.set(newNode.name, newNode);
+
+    return newNode;
   }
 
   /** Remove the named file/folder node from this folder */
@@ -125,7 +127,15 @@ export class FileTree {
       }
     }
 
+    function addDeepContent(node: FolderNode, layer: number) {
+      let lastNode: any = node;
+      for (let i = 0; i < layer; i++) {
+        lastNode = lastNode.add(`Deep Folder ${i}`, true);
+      }
+    }
+
     this.root.content = new Map();
+    addDeepContent(this.root, 20);
     this.root.add("big folder", true);
     this.root.add("smol item folder", true);
     this.root.add("empty folder", true);

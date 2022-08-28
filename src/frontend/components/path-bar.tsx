@@ -6,6 +6,9 @@ interface PathBarProps {
   openFolderHandler: (node: FolderNode) => void;
 }
 
+/** UI for displaying the current file path
+ *
+ */
 const PathBar = ({ currentFolder, openFolderHandler }: PathBarProps) => {
   let path: FolderNode[] = [];
 
@@ -21,10 +24,14 @@ const PathBar = ({ currentFolder, openFolderHandler }: PathBarProps) => {
   };
 
   getPath(currentFolder);
+
   path.reverse();
+  if (path.length > 6) {
+    path = path.slice(-6);
+  }
 
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
+    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
       {path.map((node) => (
         <div
           onClick={() => openFolderHandler(node)}

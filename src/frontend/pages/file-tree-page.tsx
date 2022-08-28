@@ -3,6 +3,7 @@ import useSelectedRows from "../hooks/use-selected-rows";
 import Folder from "../components/folder";
 import { FileTree, FolderNode } from "../helpers/file-tree";
 import PathBar from "../components/path-bar";
+import Button from "../components/button";
 
 /**
  * TODO: Move tree generation to a perm. location.
@@ -34,7 +35,6 @@ const FileTreePage = ({}: FileTreeProps) => {
   // content.sort((a, b) => a.name.localeCompare(b.name));
 
   let { selected } = selectionAPI;
-  console.log(selected);
 
   /** Onclick Hanlders */
 
@@ -53,9 +53,7 @@ const FileTreePage = ({}: FileTreeProps) => {
 
   /** Generate content for demo'ing. TODO: Remove before releasing */
   const generateDemo = () => {
-    console.log("generating content");
     tree.generateContent();
-    console.log(tree);
     setCurrentFolder(tree.root);
   };
 
@@ -66,7 +64,6 @@ const FileTreePage = ({}: FileTreeProps) => {
 
   /** Set the current folder to the expanded folder */
   const currentFolderOnclick = (node: any) => {
-    console.log(node);
     tree.openFolder(node);
     setCurrentFolder(node);
   };
@@ -78,26 +75,24 @@ const FileTreePage = ({}: FileTreeProps) => {
     setCurrentFolder(parentFolder);
   };
 
-  console.log(selected);
-
   return (
     <>
       <div style={{ display: "flex" }}>
-        <button onClick={deleteItems} disabled={selected.size === 0}>
+        <Button onClick={deleteItems} isDisabled={selected.size === 0}>
           Delete
-        </button>
+        </Button>
 
-        <button onClick={addFolder}>New Folder</button>
-        <button>New File</button>
-        <button onClick={() => currentFolderOnclick(Array.from(selected)[0])}>
+        <Button onClick={addFolder}>New Folder</Button>
+        <Button>New File</Button>
+        <Button onClick={() => currentFolderOnclick(Array.from(selected)[0])}>
           View Current Folder
-        </button>
-        <button onClick={() => goToPareentFolder()}>Go to Parent Folder</button>
+        </Button>
+        <Button onClick={() => goToPareentFolder()}>Go to Parent Folder</Button>
 
         {
           // TODO: Generate Demo button should be removed before release
         }
-        <button onClick={generateDemo}>Generate Demo Content</button>
+        <Button onClick={generateDemo}>Generate Demo Content</Button>
       </div>
 
       <div>
@@ -115,6 +110,7 @@ const FileTreePage = ({}: FileTreeProps) => {
           key={currentFolder.id}
           node={currentFolder}
           selectionAPI={selectionAPI}
+          openFolderHandler={currentFolderOnclick}
         />
       </div>
     </>

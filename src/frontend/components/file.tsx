@@ -1,16 +1,6 @@
 import React from "react";
 import { FileNode, FTNode } from "../helpers/file-tree";
-
-// TODO: Temp style
-const styles = {
-  indentedContainer: {
-    marginLeft: "4px",
-    padding: "8px 20px",
-  },
-  selected: {
-    backgroundColor: "#98bdfa",
-  },
-};
+import Row from "../components/row";
 
 interface FileProps {
   node: FileNode;
@@ -32,12 +22,12 @@ const File = ({ node, selectionAPI }: FileProps) => {
   };
 
   return (
-    <div
-      style={selected.has(node) ? styles.selected : {}}
-      onClick={(e) => toggleSelected(e, node)}
+    <Row
+      isSelected={selected.has(node)}
+      onClick={(e: any) => toggleSelected(e, node)}
     >
       {name}
-    </div>
+    </Row>
   );
 };
 

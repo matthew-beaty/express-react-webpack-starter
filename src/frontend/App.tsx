@@ -27,13 +27,10 @@ export class App extends React.Component<AppProps, AppState> {
   //   }
 
   render() {
-    const { time } = this.state;
     return (
       <>
-        <h1>Hello World</h1>
+        <h1>File Explorer</h1>
         <FileTreePage />
-        {/* <VirtualTestPage /> */}
-        <div>{time}</div>
       </>
     );
   }

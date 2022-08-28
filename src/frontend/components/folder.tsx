@@ -2,42 +2,64 @@ import React from "react";
 import { FolderNode, FTNode } from "../helpers/file-tree";
 import File from "../components/file";
 import VirtualList from "../components/virtual-list";
+import Row from "../components/row";
 
 interface FolderProps {
   node: FolderNode;
   selectionAPI: any;
+  openFolderHandler: any;
 }
 
 const styles = {
   indentedContainer: {
     marginLeft: "4px",
     padding: "8px 20px",
+    height: "100%",
+    width: "100%",
+  },
+  row: {
+    minWidth: "250px",
+    padding: "20px",
   },
   selected: {
     backgroundColor: "#98bdfa",
   },
 };
 
-export const ClosedFolder = ({ node, selectionAPI }: FolderProps) => {
+export const ClosedFolder = ({
+  node,
+  selectionAPI,
+  openFolderHandler,
+}: FolderProps) => {
   const { selected, toggleSelection } = selectionAPI;
 
   const toggleSelected = (e: React.MouseEvent, node: FTNode) => {
     e.preventDefault();
     toggleSelection(e, node);
   };
+
   return (
-    <div
-      style={selected.has(node) ? styles.selected : {}}
-      onClick={(e) => toggleSelected(e, node)}
+    <Row
+      onClick={(e: any) => toggleSelected(e, node)}
+      isSelected={selected.has(node)}
     >
       {/* <span onClick={toggleExpanded}>{isExpanded ? "<" : ">"} </span> */}
-      {node.name}
-    </div>
+      <button
+        style={{
+          border: "none",
+          backgroundColor: "inherit",
+          cursor: "pointer",
+        }}
+        onClick={openFolderHandler}
+      >
+        {node.name}
+      </button>
+    </Row>
   );
 };
 
 /** UI for representing a folder in a file tree */
-const Folder = ({ node, selectionAPI }: FolderProps) => {
+const Folder = ({ node, selectionAPI, openFolderHandler }: FolderProps) => {
   // let [isExpanded, setExpanded] = React.useState(false);
 
   // TODO: sort should work for number strings
@@ -70,6 +92,7 @@ const Folder = ({ node, selectionAPI }: FolderProps) => {
                     key={d.id}
                     node={d}
                     selectionAPI={selectionAPI}
+                    openFolderHandler={() => openFolderHandler(d)}
                   />
                 ) : (
                   <File key={d.id} node={d} selectionAPI={selectionAPI} />

@@ -1,10 +1,5 @@
 import React from "react";
-import { FileNode, FTNode } from "../file-tree";
-
-interface FileProps {
-  node: FileNode;
-  selectionAPI: any;
-}
+import { FileNode, FTNode } from "../helpers/file-tree";
 
 // TODO: Temp style
 const styles = {
@@ -17,19 +12,23 @@ const styles = {
   },
 };
 
+interface FileProps {
+  node: FileNode;
+  selectionAPI: any;
+}
+
+/** UI to represent a File in a file tree */
 const File = ({ node, selectionAPI }: FileProps) => {
   let { selected, toggleSelection } = selectionAPI;
   let { name } = node;
 
   const toggleSelected = (e: React.MouseEvent, node: FTNode) => {
     e.preventDefault();
-    // don't select row when clicking on expand/collapse arrow.
+    // TODO: don't select row when clicking on expand/collapse arrow.
     // NOTE: this could be improved and could break if the HTML changes, but its
     // a slight quality of life improvement for now.
 
-    // if (e.currentTarget.firstChild.nodeName !== "SPAN") {
     toggleSelection(e, node);
-    // }
   };
 
   return (

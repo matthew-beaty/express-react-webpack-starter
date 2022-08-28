@@ -2,6 +2,9 @@ import * as React from "react";
 import { render } from "react-dom";
 import FileTreePage from "./pages/file-tree-page";
 
+// TEMP
+// import VirtualTestPage from "../frontend/components/virtual-list";
+
 interface AppProps {
   name: string;
 }
@@ -24,12 +27,12 @@ export class App extends React.Component<AppProps, AppState> {
   //   }
 
   render() {
-    const { name } = this.props;
     const { time } = this.state;
     return (
       <>
-        <h1>{name}</h1>
+        <h1>Hello World</h1>
         <FileTreePage />
+        {/* <VirtualTestPage /> */}
         <div>{time}</div>
       </>
     );

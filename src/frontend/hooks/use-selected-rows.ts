@@ -1,6 +1,15 @@
 import React from "react";
-import { FTNode } from "../file-tree";
+import { FTNode } from "../helpers/file-tree";
 
+/**
+ * useSelectedRows is a hook that manages which rows in a list are
+ * selected at any given time. It can handle multiple selected items of
+ * different kinds of objects, but is currently expecting to receieve only
+ * FTNodes (fileTreeNode objects).
+ *
+ * TODO: Currently does not support automatically adding all selections in
+ * a line.
+ * */
 export default function useSelectedRows() {
   // TODO: Fix any
   let [selected, setSelected]: any = React.useState(new Set());
@@ -14,8 +23,6 @@ export default function useSelectedRows() {
       let newSelected: Set<FTNode> = new Set();
       newSelected.add(fsNode);
       setSelected(newSelected);
-      // BUG: Shift allows multiple selection, but doesn't select
-      // all rows in a line.
     } else if (e.shiftKey) {
       let newSelected = new Set(selected);
       newSelected.add(fsNode);

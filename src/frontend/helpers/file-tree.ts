@@ -1,15 +1,17 @@
 /** A base class for File/Folder Nodes */
 class FFNode {
-  /** Note - should be globally unique ID's. Since it's unclear
-   * in this app whether we generate them
-   * client side or server side, this will work for now.
-   */
   id: string;
   name: string;
 
   constructor(name: string) {
-    this.name = name;
+    /** TODO: id should be universally unique ID's. Since it's unclear
+     * in this app whether we would generate them client side or server side,
+     * the current code throughout uses name for now. This could cause bugs related to
+     * moving folders / renaming / and/or opening the correct folder.
+     */
+
     this.id = name;
+    this.name = name;
   }
 }
 

@@ -34,7 +34,6 @@ const Row = ({ isSelected, onClick, children }: RowProps) => {
 
   let rowStyle = styles.row;
   rowStyle = isHighlighted ? { ...rowStyle, ...styles.highlighted } : rowStyle;
-  // NOTE: isSelected should always override isHighlighted
   rowStyle = isSelected ? { ...rowStyle, ...styles.selected } : rowStyle;
 
   return (

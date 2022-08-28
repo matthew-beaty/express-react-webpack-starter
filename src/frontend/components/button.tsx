@@ -1,8 +1,6 @@
 import React from "react";
 import colors from "../theme/colors";
 
-// const style = {};
-
 interface ButtonProps {
   children: any;
   isPrimary?: boolean;

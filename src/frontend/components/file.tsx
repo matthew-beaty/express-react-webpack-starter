@@ -14,10 +14,6 @@ const File = ({ node, selectionAPI }: FileProps) => {
 
   const toggleSelected = (e: React.MouseEvent, node: FTNode) => {
     e.preventDefault();
-    // TODO: don't select row when clicking on expand/collapse arrow.
-    // NOTE: this could be improved and could break if the HTML changes, but its
-    // a slight quality of life improvement for now.
-
     toggleSelection(e, node);
   };
 

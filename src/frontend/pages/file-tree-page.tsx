@@ -11,11 +11,14 @@ import Button from "../components/button";
  * data once at the network layer, convert that data into this tree
  * shape.
  */
-let tree = new FileTree();
 
+const tree = new FileTree();
 const emptyFolder = new FolderNode("empty");
-
-interface FileTreeProps {}
+enum CreateUIState {
+  None = 0,
+  CreateFolder,
+  CreateFile,
+}
 
 /**
  * FileTreePage
@@ -23,31 +26,32 @@ interface FileTreeProps {}
  * Page for displaying our default file tree explorer.
  *
  */
-const FileTreePage = ({}: FileTreeProps) => {
+const FileTreePage = () => {
   let selectionAPI = useSelectedRows();
 
   let [name, setName] = React.useState("");
-
+  let [showCreateUI, setCreateUI] = React.useState(CreateUIState.None);
   let [currentFolder, setCurrentFolder] = React.useState(emptyFolder);
-
-  // TODO: sort should work for number strings
-  // TODO: ideally folders appear before files?
-  // content.sort((a, b) => a.name.localeCompare(b.name));
-
-  let { selected } = selectionAPI;
 
   /** Onclick Hanlders */
 
   /** Create a new folder object within selected parent folder */
-  const addFolder = () => {
-    // TODO FIX ANY
-    currentFolder.add(name, true);
+  const toggleCreateUI = (isFolder: boolean) => {
+    setCreateUI(
+      isFolder ? CreateUIState.CreateFolder : CreateUIState.CreateFile
+    );
+  };
+  const addNode = () => {
+    console.log(currentFolder);
+    let isFolder = showCreateUI === CreateUIState.CreateFolder;
+    currentFolder.add(name, isFolder);
     setName("");
+    setCreateUI(CreateUIState.None);
   };
 
   /** Delete one or more selected files/folders */
   const deleteItems = () => {
-    tree.removeNodes(selected);
+    tree.removeNodes(selectionAPI.selected);
     selectionAPI.clearAll();
   };
 
@@ -63,7 +67,7 @@ const FileTreePage = ({}: FileTreeProps) => {
   };
 
   /** Set the current folder to the expanded folder */
-  const currentFolderOnclick = (node: any) => {
+  const openFolder = (node: any) => {
     tree.openFolder(node);
     setCurrentFolder(node);
 
@@ -92,20 +96,23 @@ const FileTreePage = ({}: FileTreeProps) => {
           >
             Back
           </Button>
-          <Button onClick={deleteItems} isDisabled={selected.size === 0}>
+          <Button
+            onClick={deleteItems}
+            isDisabled={selectionAPI.selected.size === 0}
+          >
             Delete
           </Button>
           <Button
-            onClick={() => currentFolderOnclick(Array.from(selected)[0])}
-            isDisabled={selected.size === 0}
+            onClick={() => openFolder(Array.from(selectionAPI.selected)[0])}
+            isDisabled={selectionAPI.selected.size === 0}
           >
             Open Folder
           </Button>
         </div>
 
         <div>
-          <Button onClick={addFolder}>New Folder</Button>
-          <Button>New File</Button>
+          <Button onClick={() => toggleCreateUI(true)}>New Folder</Button>
+          <Button onClick={() => toggleCreateUI(false)}>New File</Button>
         </div>
 
         {
@@ -116,22 +123,34 @@ const FileTreePage = ({}: FileTreeProps) => {
         </div>
       </div>
 
-      <div>
-        <label>
-          Name: <input onChange={onChange} value={name} />
-        </label>
-      </div>
+      {showCreateUI !== CreateUIState.None && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "50px",
+            alignItems: "center",
+          }}
+        >
+          <input
+            style={{ width: "300px", height: "20px" }}
+            onChange={onChange}
+            value={name}
+            placeholder="name"
+          />
+          <Button onClick={addNode} isDisabled={false}>
+            Create
+          </Button>
+        </div>
+      )}
 
-      <PathBar
-        currentFolder={currentFolder}
-        openFolderHandler={currentFolderOnclick}
-      ></PathBar>
+      <PathBar currentFolder={currentFolder} openFolder={openFolder}></PathBar>
       <div>
         <Folder
           key={currentFolder.id}
           node={currentFolder}
           selectionAPI={selectionAPI}
-          openFolderHandler={currentFolderOnclick}
+          openFolder={openFolder}
         />
       </div>
     </>

@@ -24,7 +24,7 @@ const Folder = ({
   let nodes = showSearch ? searchNodes : Array.from(node.content.values());
 
   // NOTE: This sort is great because it sorts numbers inside of strings properly,
-  // but we don't want to do sort on every render
+  // but we don't want to do sort on every render.
   // We should move sort to happen on significant actions once, and then render can be fast.
   let sortedContent = nodes.sort((a: any, b: any) =>
     a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, {

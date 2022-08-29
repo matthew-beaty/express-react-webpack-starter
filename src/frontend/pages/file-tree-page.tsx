@@ -31,6 +31,8 @@ const FileTreePage = () => {
 
   let [name, setName] = React.useState("");
   let [showCreateUI, setCreateUI] = React.useState(CreateUIState.None);
+  let [searchNodes, setSearchNodes] = React.useState([]);
+  let [showSearchUI, setShowSearchUI] = React.useState(false);
   let [currentFolder, setCurrentFolder] = React.useState(emptyFolder);
 
   /** Onclick Hanlders */
@@ -41,12 +43,17 @@ const FileTreePage = () => {
       isFolder ? CreateUIState.CreateFolder : CreateUIState.CreateFile
     );
   };
+
   const addNode = () => {
     console.log(currentFolder);
     let isFolder = showCreateUI === CreateUIState.CreateFolder;
     currentFolder.add(name, isFolder);
     setName("");
     setCreateUI(CreateUIState.None);
+  };
+
+  const search = () => {
+    setSearchNodes(tree.search(name));
   };
 
   /** Delete one or more selected files/folders */
@@ -113,6 +120,7 @@ const FileTreePage = () => {
         <div>
           <Button onClick={() => toggleCreateUI(true)}>New Folder</Button>
           <Button onClick={() => toggleCreateUI(false)}>New File</Button>
+          <Button onClick={() => setShowSearchUI(true)}>Search</Button>
         </div>
 
         {
@@ -144,6 +152,38 @@ const FileTreePage = () => {
         </div>
       )}
 
+      {showSearchUI && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "50px",
+            alignItems: "center",
+          }}
+        >
+          <input
+            style={{ width: "300px", height: "20px" }}
+            onChange={onChange}
+            value={name}
+            placeholder="name"
+          />
+          <Button onClick={search} isDisabled={false}>
+            Go
+          </Button>
+          <Button
+            onClick={() => {
+              setShowSearchUI(false);
+              setSearchNodes([]);
+              setName("");
+            }}
+            isDisabled={false}
+            isPrimary={false}
+          >
+            Close
+          </Button>
+        </div>
+      )}
+
       <PathBar currentFolder={currentFolder} openFolder={openFolder}></PathBar>
       <div>
         <Folder
@@ -151,6 +191,8 @@ const FileTreePage = () => {
           node={currentFolder}
           selectionAPI={selectionAPI}
           openFolder={openFolder}
+          showSearch={showSearchUI}
+          searchNodes={searchNodes}
         />
       </div>
     </>

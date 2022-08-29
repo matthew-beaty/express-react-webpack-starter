@@ -151,4 +151,22 @@ export class FileTree {
       addContent(folder, 1000);
     }
   }
+
+  search(text: string) {
+    let nodes: FTNode[] = [];
+
+    function traverse(node: FTNode) {
+      if (node instanceof FolderNode && node.content) {
+        Array.from(node.content.values()).forEach((n: any) => {
+          if (n.name === text) nodes.push(n);
+
+          if (node instanceof FolderNode && n.content) traverse(n);
+        });
+      }
+    }
+
+    traverse(this.root);
+
+    return nodes;
+  }
 }

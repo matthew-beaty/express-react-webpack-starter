@@ -1,8 +1,36 @@
-# Express React Webpack starter
-A starter Webpack 4 configuration for basic projects with Express and React.
+# Web Based File Explorer
 
 ## Features
-- Build single page web apps with typescript.
+- View a list of files and folders
+- View the folder path and navigate back folders
+- Add/Delete files and folders
+- Delete a selection of multiple files/folders
+- Search for any file by exact name
+
+TODO
+- Fix window'ing
+- Move files and folders
+
+## Bugs/Improvements
+- *Blocker* Window'ing a folder is off and must be fixed before release
+- Some any typings
+- `CreateSearchUI` and `CreateContentUI` logic should be combined so that we can't open both at the same time
+- `Tree.generateContent` could be improved with better generation logic
+- `FTNode` should be using a UUID generator either on the frontend or backend
+- `useSelectedRows()`
+- Opening a file should be disabled in the UI and the `FileTree` class
+- Starting node is currently an empty node template, but should always be the root tree node
+- Using the SelectionAPI in a very large folder is still slow, and this should be fixed
+- Should have created a new branch and PR to be able to merge this as a clean feature
+
+## Testing
+- Follow the Dependencies and Dev Sections to start the app
+- Once the app is open, click the Generate Content button 
+- Add a new folder or file
+- Use the search button to look for `file 0`
+- Navigate through `Deep Folder 0` and subsequent folders to test out display and pathbar
+- Select one or more files and folders and delete them
+
 
 ## Dependencies
 - Install `node`

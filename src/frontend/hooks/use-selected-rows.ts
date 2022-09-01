@@ -1,6 +1,12 @@
 import React from "react";
 import { FTNode } from "../helpers/file-tree";
 
+export interface UseSelectedRowsHook {
+  selected: Set<FTNode>;
+  toggleSelection: (e: React.MouseEvent, fsNode: FTNode) => void;
+  clearAll: () => void;
+}
+
 /**
  * useSelectedRows is a hook that manages which rows in a list are
  * selected at any given time. It can handle multiple selected items of
@@ -10,9 +16,11 @@ import { FTNode } from "../helpers/file-tree";
  * TODO: Currently does not support automatically adding all selections in
  * a line.
  * */
-export default function useSelectedRows() {
-  // TODO: Fix any
-  let [selected, setSelected]: any = React.useState(new Set());
+export default function () {
+  let [selected, setSelected]: [
+    Set<FTNode>,
+    React.Dispatch<React.SetStateAction<Set<FTNode>>>
+  ] = React.useState(new Set());
 
   function toggleSelection(e: React.MouseEvent, fsNode: FTNode) {
     if (selected.has(fsNode)) {

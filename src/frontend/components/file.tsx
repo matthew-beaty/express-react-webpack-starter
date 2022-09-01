@@ -1,10 +1,11 @@
 import React from "react";
 import { FileNode, FTNode } from "../helpers/file-tree";
 import Row from "../components/row";
+import { UseSelectedRowsHook } from "../hooks/use-selected-rows";
 
 interface FileProps {
   node: FileNode;
-  selectionAPI: any;
+  selectionAPI: UseSelectedRowsHook;
 }
 
 /** UI to represent a File in a file tree */
@@ -20,7 +21,7 @@ const File = ({ node, selectionAPI }: FileProps) => {
   return (
     <Row
       isSelected={selected.has(node)}
-      onClick={(e: any) => toggleSelected(e, node)}
+      onClick={(e: React.MouseEvent) => toggleSelected(e, node)}
     >
       {name}
     </Row>

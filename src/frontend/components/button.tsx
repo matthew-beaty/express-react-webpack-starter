@@ -2,7 +2,7 @@ import React from "react";
 import colors from "../theme/colors";
 
 interface ButtonProps {
-  children: any;
+  children: React.ReactNode;
   isPrimary?: boolean;
   isDisabled?: boolean;
   onClick?: () => void;

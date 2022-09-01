@@ -1,11 +1,12 @@
 import React from "react";
 import { FTNode, FolderNode } from "../helpers/file-tree";
 import Row from "../components/row";
+import { UseSelectedRowsHook } from "../hooks/use-selected-rows";
 
 interface FolderProps {
   node: FolderNode;
-  selectionAPI: any;
-  openFolder: any;
+  selectionAPI: UseSelectedRowsHook;
+  openFolder: () => void;
 }
 
 export const ClosedFolder = ({
@@ -15,14 +16,19 @@ export const ClosedFolder = ({
 }: FolderProps) => {
   const { selected, toggleSelection } = selectionAPI;
 
-  const toggleSelected = (e: React.MouseEvent, node: FTNode) => {
+  const toggleSelected = (
+    e: React.MouseEvent<Element, MouseEvent>,
+    node: FTNode
+  ) => {
     e.preventDefault();
     toggleSelection(e, node);
   };
 
   return (
     <Row
-      onClick={(e: any) => toggleSelected(e, node)}
+      onClick={(e: React.MouseEvent<Element, MouseEvent>) =>
+        toggleSelected(e, node)
+      }
       isSelected={selected.has(node)}
     >
       <button

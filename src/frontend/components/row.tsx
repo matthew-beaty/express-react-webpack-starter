@@ -22,8 +22,8 @@ const styles = {
 
 interface RowProps {
   isSelected: boolean;
-  onClick: any;
-  children: any;
+  onClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
+  children: React.ReactNode;
 }
 
 /**

@@ -1,7 +1,7 @@
 import React from "react";
 import useSelectedRows from "../hooks/use-selected-rows";
 import Folder from "../components/folder";
-import { FileTree, FolderNode } from "../helpers/file-tree";
+import { FileTree, FolderNode, FTNode } from "../helpers/file-tree";
 import PathBar from "../components/path-bar";
 import Button from "../components/button";
 
@@ -13,6 +13,8 @@ import Button from "../components/button";
  */
 
 const tree = new FileTree();
+// TODO: -- this is a temporary solution that should be fixed. It currently causes
+// a user's first folder/files to be connected to the incorrect tree node.
 const emptyFolder = new FolderNode("empty");
 enum CreateUIState {
   None = 0,
@@ -58,7 +60,7 @@ const FileTreePage = () => {
 
   /** Delete one or more selected files/folders */
   const deleteItems = () => {
-    tree.removeNodes(selectionAPI.selected);
+    tree.removeNodes(Array.from(selectionAPI.selected.values()));
     selectionAPI.clearAll();
   };
 
@@ -74,12 +76,17 @@ const FileTreePage = () => {
   };
 
   /** Set the current folder to the expanded folder */
-  const openFolder = (node: any) => {
-    tree.openFolder(node);
-    setCurrentFolder(node);
+  const openFolder = (node: FTNode) => {
+    // only attempt to open a folder node -- the UI should also disable the
+    // open folder button when selecting a file
+    if (node instanceof FolderNode) {
+      tree.openFolder(node);
+      setCurrentFolder(node);
 
-    selectionAPI.clearAll();
+      selectionAPI.clearAll();
+    }
   };
+
   /** Set the current folder to the current folder's parent */
   const goToPareentFolder = () => {
     if (currentFolder.parent.name === "root") return;
@@ -131,26 +138,39 @@ const FileTreePage = () => {
         </div>
       </div>
 
-      {showCreateUI !== CreateUIState.None && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            height: "50px",
-            alignItems: "center",
-          }}
-        >
-          <input
-            style={{ width: "300px", height: "20px" }}
-            onChange={onChange}
-            value={name}
-            placeholder="name"
-          />
-          <Button onClick={addNode} isDisabled={false}>
-            Create
-          </Button>
-        </div>
-      )}
+      {
+        // TODO: both the showCreateUI and showSearch UI should be islolated to their own components
+        // along with their display logic so that only one is displayed at a time.
+        showCreateUI !== CreateUIState.None && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              height: "50px",
+              alignItems: "center",
+            }}
+          >
+            <input
+              style={{ width: "300px", height: "20px" }}
+              onChange={onChange}
+              value={name}
+              placeholder="name"
+            />
+            <Button onClick={addNode} isDisabled={false}>
+              Create
+            </Button>
+            <Button
+              onClick={() => {
+                setCreateUI(CreateUIState.None);
+                setName("");
+              }}
+              isPrimary={false}
+            >
+              Close
+            </Button>
+          </div>
+        )
+      }
 
       {showSearchUI && (
         <div
@@ -165,7 +185,7 @@ const FileTreePage = () => {
             style={{ width: "300px", height: "20px" }}
             onChange={onChange}
             value={name}
-            placeholder="name"
+            placeholder="search"
           />
           <Button onClick={search} isDisabled={false}>
             Go
@@ -185,16 +205,15 @@ const FileTreePage = () => {
       )}
 
       <PathBar currentFolder={currentFolder} openFolder={openFolder}></PathBar>
-      <div>
-        <Folder
-          key={currentFolder.id}
-          node={currentFolder}
-          selectionAPI={selectionAPI}
-          openFolder={openFolder}
-          showSearch={showSearchUI}
-          searchNodes={searchNodes}
-        />
-      </div>
+
+      <Folder
+        key={currentFolder.id}
+        node={currentFolder}
+        selectionAPI={selectionAPI}
+        openFolder={openFolder}
+        showSearch={showSearchUI}
+        searchNodes={searchNodes}
+      />
     </>
   );
 };

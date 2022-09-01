@@ -1,34 +1,22 @@
 import React from "react";
 import throttle from "../helpers/throttle";
 
-const amountRows = 100;
+const amountRows = 200;
 const rowHeight = 40;
-const amountRowsBuffered = 2;
-
-type DataItem = {
-  index: number;
-  text: string;
-  top: number;
-};
-
-const styles = {
-  list: "",
-  rows: "height: 40px",
-};
+const amountRowsBuffered = 4;
+let windowHeight = 600;
 
 interface RowProps {
-  children: any;
-  style: any;
+  children: React.ReactNode;
+  style: {};
 }
-
-let windowHeight = window.innerHeight;
 
 const Row = ({ style, children }: RowProps) => {
   return <div style={style}>{children}</div>;
 };
 
 interface VirtualListProps {
-  children: any;
+  children: React.ReactNode;
 }
 
 const VirtualList = ({ children }: VirtualListProps) => {
@@ -36,58 +24,52 @@ const VirtualList = ({ children }: VirtualListProps) => {
   const rowsRef = React.useRef();
   const arrayChildren = React.Children.toArray(children);
 
-  const data: DataItem[] = [];
-  for (let index = 0; index < amountRows; index++) {
-    data.push({ index, text: `Index ${index}`, top: index * rowHeight });
-  }
-
   const indexStart = Math.max(
     Math.floor(scrollTop / rowHeight) - amountRowsBuffered,
     0
   );
 
   const indexEnd = Math.min(
-    Math.ceil((scrollTop + windowHeight) / rowHeight - 1) + amountRowsBuffered,
+    Math.ceil(Math.floor((scrollTop + windowHeight) / rowHeight)) +
+      amountRowsBuffered,
     amountRows - 1
   );
 
   const update = (e: any) => {
     setScrollTop(e.target.scrollTop);
-    console.log(e.target.scrollTop);
   };
 
-  const throttledUpdate = throttle(update, 50);
+  // TODO: throttle doesn't appear to be working
+  const throttledUpdate = throttle(update, 500);
+
+  let childrenSlice = arrayChildren.slice(indexStart, indexEnd);
 
   return (
     <div
-      className={styles.list}
       onScroll={throttledUpdate}
-      style={{ height: windowHeight, overflowY: "scroll" }}
+      style={{ height: `${windowHeight}px`, overflowY: "scroll" }}
     >
       <div
-        className={styles.rows}
         style={{
-          height: amountRows * rowHeight,
+          height: `${amountRows * rowHeight}px`,
           width: "800px",
           position: "relative",
         }}
         ref={rowsRef}
       >
-        {[...arrayChildren]
-          .slice(indexStart, indexEnd + 1)
-          .map((item, index) => (
-            <Row
-              key={index}
-              style={{
-                top: index * rowHeight,
-                height: "40px",
-                width: "inherit",
-                position: "absolute",
-              }}
-            >
-              {item}
-            </Row>
-          ))}
+        {childrenSlice.map((item, index) => (
+          <Row
+            key={index}
+            style={{
+              top: `${(indexStart + index) * rowHeight}px`,
+              height: "40px",
+              width: "inherit",
+              position: "absolute",
+            }}
+          >
+            {item}
+          </Row>
+        ))}
       </div>
     </div>
   );

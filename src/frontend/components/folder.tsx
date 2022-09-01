@@ -3,11 +3,12 @@ import { FolderNode, FTNode } from "../helpers/file-tree";
 import File from "../components/file";
 import VirtualList from "../components/virtual-list";
 import ClosedFolder from "./closed-folder";
+import { UseSelectedRowsHook } from "../hooks/use-selected-rows";
 
 interface FolderProps {
   node: FolderNode;
-  selectionAPI: any;
-  openFolder: any;
+  selectionAPI: UseSelectedRowsHook;
+  openFolder: (node: FTNode) => void;
   showSearch: boolean;
   searchNodes: FTNode[];
 }
@@ -26,7 +27,7 @@ const Folder = ({
   // NOTE: This sort is great because it sorts numbers inside of strings properly,
   // but we don't want to do sort on every render.
   // We should move sort to happen on significant actions once, and then render can be fast.
-  let sortedContent = nodes.sort((a: any, b: any) =>
+  let sortedContent = nodes.sort((a: FTNode, b: FTNode) =>
     a.name.localeCompare(b.name, navigator.languages[0] || navigator.language, {
       numeric: true,
       ignorePunctuation: true,
